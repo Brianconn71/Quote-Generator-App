@@ -4,22 +4,29 @@ const authorText = document.getElementById('author');
 const twitterBtn = document.getElementById('twitter');
 const newQuoteBtn = document.getElementById('new-quote');
 
-json
-// Get Quote from API
-async function getQuote(){
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-    const apiUrl = 'http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json';
+let apiQuotes = [];
 
+
+// show new quote
+function newQuote(){
+    //  Pick a Random Quote from apiQuotes array
+    const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
+    authorText.textContent = quote.author;
+    quoteText.textContent = quote.text
+}
+// Get quotes from api
+
+async function getQuotes(){
+    const apiUrl = 'https://type.fit/api/quotes';
     try{
-        const response = await fetch(proxyUrl + apiUrl);
-        const data = await response.json();
-        authorText.innerText = data.quoteAuthor;
-        quoteText.innerText = data.quoteText;
-    } catch (error) {
-        getQuote();
+        const response = await fetch(apiUrl);
+        apiQuotes = await response.json();
+        newQuote();
+    } catch (error){
+        // Catch error here.
     }
 }
 
-// On Load
 
-getQuote();
+//  On load
+getQuotes()
